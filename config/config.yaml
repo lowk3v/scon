@@ -1,0 +1,27 @@
+mainnet:
+  default:
+    bsc-scan-key: ""
+
+  bscscan:
+    chain-id: 56
+    chain-name: BSC
+    api: https://api.bscscan.com
+    host: https://bscscan.com
+    token-info: /api?module=token&action=tokeninfo&contractaddress=%s&apikey=%s
+    search-handler: /searchHandler?term=$ADDRESS&filterby=0
+    token-total-supply: /api?module=stats&action=tokensupply&contractaddress=$ADDRESS&apikey=$APIKEY
+    get-sourcecode: /api?module=contract&action=getsourcecode&address=$ADDRESS&apikey=$APIKEY
+
+testnet:
+  default:
+    bsc-scan-key: ""
+
+  bscscan:
+    chain-id: 87
+    chain-name: BSC
+    api: https://api-testnet.bscscan.com
+    host: https://testnet.bscscan.com
+    token-info: /api?module=token&action=tokeninfo&contractaddress=%s&apikey=%s
+    search-handler: /searchHandler?term=$ADDRESS&filterby=0
+    token-total-supply: /api?module=stats&action=tokensupply&contractaddress=$ADDRESS&apikey=$APIKEY
+    get-sourcecode: /api?module=contract&action=getsourcecode&address=$ADDRESS&apikey=$APIKEY
