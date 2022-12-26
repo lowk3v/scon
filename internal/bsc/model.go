@@ -6,7 +6,7 @@ import (
 
 	"github.com/tidwall/gjson"
 
-	"scon/internal/model"
+	"github.com/lowk3v/scon/internal/model"
 )
 
 type ApiResponse struct {
@@ -37,21 +37,32 @@ func (c *ApiResponse) parseFromJson(json string) error {
 		}
 
 		if result.Get("SourceCode").String() == "" {
-			return errors.New("contract source code not verified")
+			return errors.New("contract not verified")
 		}
 
-		source, isOk := gjson.Parse(result.Get("SourceCode").String()).Value().(map[string]interface{})
-		if !isOk {
-			return errors.New(fmt.Sprintf("cannot parse source code: %v", raw.Get("SourceCode").String()))
-		}
-
-		for k, v := range source {
-			v2 := v.(map[string]interface{})
+		// parse to map when response has multiple files
+		sourceMap, isOk := gjson.Parse(result.Get("SourceCode").String()).Value().(map[string]interface{})
+		if isOk {
+			for k, v := range sourceMap {
+				v2 := v.(map[string]interface{})
+				cont.Sourcecode = append(cont.Sourcecode, map[string]string{
+					"filename": k,
+					"content":  v2["content"].(string),
+				})
+			}
+		} else {
+			// parse to string when sourceMap code is single file
+			sourceStr := result.Get("SourceCode").String()
+			fileSrcName := fmt.Sprintf("%s.sol", cont.ContractName)
+			if fileSrcName == "" {
+				fileSrcName = "source.sol"
+			}
 			cont.Sourcecode = append(cont.Sourcecode, map[string]string{
-				"filename": k,
-				"content":  v2["content"].(string),
+				"filename": fileSrcName,
+				"content":  sourceStr,
 			})
 		}
+
 		c.Data = append(c.Data, cont)
 	}
 

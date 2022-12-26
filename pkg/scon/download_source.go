@@ -8,17 +8,17 @@ import (
 
 	"github.com/fatih/color"
 
-	"scon/config"
-	"scon/internal/bsc"
-	"scon/internal/model"
-	"scon/internal/utils"
+	"github.com/lowk3v/scon/config"
+	"github.com/lowk3v/scon/internal/bsc"
+	"github.com/lowk3v/scon/internal/model"
+	"github.com/lowk3v/scon/internal/utils/file"
 )
 
 func DumpSource(sc *model.SmartContract, outputDir string) error {
 	if !sc.IsValidAddress() || !sc.HasChain() {
 		return errors.New("token is not valid or chain not found")
 	}
-	if err := utils.Mkdir(outputDir); err != nil {
+	if err := file.Mkdir(outputDir); err != nil {
 		return err
 	}
 
@@ -26,7 +26,7 @@ func DumpSource(sc *model.SmartContract, outputDir string) error {
 		switch chain.ChainId {
 		case config.AppConfig.BscScan.ChainId:
 			if err := bsc.DumpSource(sc.Address, &chain); err != nil {
-				_, _ = fmt.Fprintf(os.Stderr, "Error: %v\n", err)
+				_, _ = fmt.Fprintf(os.Stderr, "%s Error: %v\n", config.Symbol.Error, err)
 			}
 		}
 		sc.Chains[idx] = chain
@@ -34,15 +34,15 @@ func DumpSource(sc *model.SmartContract, outputDir string) error {
 		// write files
 		for _, source := range chain.Contract.Sourcecode {
 			subDir := filepath.Join(outputDir, sc.Address, chain.ChainName)
-			if err := utils.Mkdir(subDir); err != nil {
+			fileSrcName := filepath.Join(subDir, source["filename"])
+			if err := file.Mkdir(subDir); err != nil {
 				return err
 			}
-			if err := utils.WriteFile(filepath.Join(subDir, source["filename"]), source["content"]); err != nil {
+			if err := file.WriteFile(fileSrcName, source["content"]); err != nil {
 				return err
 			}
+			fmt.Printf("%s Dumped source code to: %s\n", config.Symbol.Success, color.BlueString(fileSrcName))
 		}
-		fmt.Printf("[+] Dumped source code to a directory: %s\n", color.BlueString(outputDir))
-
 	}
 
 	return nil

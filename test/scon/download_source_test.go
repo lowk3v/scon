@@ -6,9 +6,9 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"scon/config"
-	"scon/internal/model"
-	"scon/pkg/scon"
+	"github.com/lowk3v/scon/config"
+	"github.com/lowk3v/scon/internal/model"
+	"github.com/lowk3v/scon/pkg/scon"
 )
 
 func init() {

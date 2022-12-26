@@ -1,13 +1,11 @@
-module scon
+module github.com/lowk3v/scon
 
 go 1.16
 
 require (
 	github.com/fatih/color v1.13.0
-	github.com/ilyakaznacheev/cleanenv v1.4.1 // indirect
 	github.com/joho/godotenv v1.4.0
 	github.com/kr/pretty v0.3.0 // indirect
-	github.com/mitchellh/mapstructure v1.5.0 // indirect
 	github.com/rogpeppe/go-internal v1.8.0 // indirect
 	github.com/stretchr/testify v1.8.1
 	github.com/tidwall/gjson v1.14.4

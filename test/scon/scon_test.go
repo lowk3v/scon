@@ -6,8 +6,8 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"scon/internal/model"
-	"scon/pkg/scon"
+	"github.com/lowk3v/scon/internal/model"
+	"github.com/lowk3v/scon/pkg/scon"
 )
 
 func Test_detectChain(t *testing.T) {

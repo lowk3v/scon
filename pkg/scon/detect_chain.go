@@ -6,9 +6,9 @@ import (
 
 	"github.com/fatih/color"
 
-	"scon/config"
-	"scon/internal/bsc"
-	"scon/internal/model"
+	"github.com/lowk3v/scon/config"
+	"github.com/lowk3v/scon/internal/bsc"
+	"github.com/lowk3v/scon/internal/model"
 )
 
 func DetectChain(inputChainName string, sc *model.SmartContract) error {
@@ -28,8 +28,10 @@ func DetectChain(inputChainName string, sc *model.SmartContract) error {
 			ChainName: config.AppConfig.BscScan.ChainName,
 		}
 		sc.Chains = append(sc.Chains, newChain)
-		fmt.Printf("[-] %s: %s[%d]\n",
-			sc.Address, color.BlueString(newChain.ChainName),
+		fmt.Printf("%s %s: %s[%d]\n",
+			config.Symbol.Success,
+			sc.Address,
+			color.BlueString(newChain.ChainName),
 			newChain.ChainId)
 	}
 	return nil

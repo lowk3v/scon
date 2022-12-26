@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"strings"
 
-	"scon/config"
-	"scon/internal/model"
-	"scon/internal/utils"
+	"github.com/lowk3v/scon/config"
+	"github.com/lowk3v/scon/internal/model"
+	"github.com/lowk3v/scon/internal/utils/http"
 )
 
 func IsBscChain(address string) (bool, error) {
@@ -16,7 +16,7 @@ func IsBscChain(address string) (bool, error) {
 		config.AppConfig.BscScan.SearchHandler)
 	api = strings.ReplaceAll(api, "$ADDRESS", address)
 
-	resp, err := utils.HttpGet(api)
+	resp, err := http.HttpGet(api)
 	if err != nil {
 		return false, err
 	}
@@ -26,7 +26,7 @@ func IsBscChain(address string) (bool, error) {
 		strings.ToLower(address)) {
 		return true, nil
 	}
-	return false, errors.New("the address not found")
+	return false, errors.New("not found")
 }
 
 func DumpSource(address string, chain *model.Chain) error {
@@ -36,7 +36,7 @@ func DumpSource(address string, chain *model.Chain) error {
 	api = strings.ReplaceAll(api, "$ADDRESS", address)
 	api = strings.ReplaceAll(api, "$APIKEY", config.Secret.BscScanKey)
 
-	respRaw, err := utils.HttpGet(api)
+	respRaw, err := http.HttpGet(api)
 	if err != nil {
 		return err
 	}

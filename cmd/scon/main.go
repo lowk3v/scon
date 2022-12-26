@@ -8,7 +8,8 @@ import (
 
 	"github.com/fatih/color"
 
-	"scon/pkg/scon"
+	"github.com/lowk3v/scon/config"
+	"github.com/lowk3v/scon/pkg/scon"
 )
 
 var args scon.Arguments
@@ -24,7 +25,7 @@ func banner() string {
 	╚════██║██║     ██║   ██║██║╚██╗██║
 	███████║╚██████╗╚██████╔╝██║ ╚████║
 	╚══════╝ ╚═════╝ ╚═════╝ ╚═╝  ╚═══╝ `+" By @LowK3v\n"),
-		color.BlueString("Discovery contract of address provided on stdin\n"),
+		color.BlueString("Discovery smart contract of address provided on stdin\n"),
 		"Credits: https://github.com/lowk3v/scon\n",
 		"Twitter: https://twitter.com/Low_K_\n",
 		color.YellowString("=================================================="),
@@ -83,10 +84,10 @@ func init() {
 		_, _ = fmt.Fprintf(os.Stderr, strings.Join(h, "\n"))
 	}
 	flag.Parse()
-
 }
 
 func main() {
 	fmt.Println(banner())
+	config.Secret.PrintInfo()
 	scon.Run(&args)
 }

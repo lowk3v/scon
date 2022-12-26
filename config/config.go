@@ -36,9 +36,16 @@ type ExplorerConfig struct {
 	GetSourcecode    string `json:"get-sourcecode"`
 }
 
+type SymbolConfig struct {
+	Success string
+	Error   string
+	Info    string
+}
+
 var Secret secretConfig
 var AppConfig appConfig
 var HttpClient *http.Client
+var Symbol SymbolConfig
 
 //go:embed config.yaml
 var appConfigYaml string
@@ -61,6 +68,12 @@ func init() {
 	err = convertToStruct(appConfigTemp[Secret.EnvMode], &AppConfig)
 	if err != nil {
 		_, _ = fmt.Fprintf(os.Stderr, "%s Error: %v\n", color.RedString("¿"), err)
+	}
+
+	Symbol = SymbolConfig{
+		Success: color.GreenString("≠"),
+		Error:   color.RedString("¿"),
+		Info:    color.BlueString("ℹ"),
 	}
 }
 
@@ -118,12 +131,13 @@ func (app *appConfig) SupportedChains() {
 }
 
 func (s *secretConfig) PrintInfo() {
-	fmt.Printf("%s Switching to [%s]\n",
-		color.GreenString("≠"),
+	fmt.Printf("%s Switching to [%s]. To run testnet set SCON_ENV=testnet\n",
+		Symbol.Info,
 		color.BlueString(Secret.EnvMode))
 	if s.BscScanKey != "" {
 		fmt.Printf("%s Loaded BscScan API Key: %s\n",
-			color.GreenString("≠"),
+			Symbol.Info,
 			color.BlueString("***"))
 	}
+	fmt.Println("")
 }

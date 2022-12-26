@@ -6,7 +6,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"scon/config"
+	"github.com/lowk3v/scon/config"
 )
 
 func TestInit(t *testing.T) {

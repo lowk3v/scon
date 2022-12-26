@@ -7,8 +7,8 @@ import (
 	"sync"
 	"time"
 
-	"scon/config"
-	"scon/internal/model"
+	"github.com/lowk3v/scon/config"
+	"github.com/lowk3v/scon/internal/model"
 )
 
 type Arguments struct {
@@ -43,7 +43,7 @@ func Run(args *Arguments) {
 		}
 
 		if !sc.IsValidAddress() {
-			_, _ = fmt.Fprintf(os.Stderr, "%s is not a blockchain address", sc.Address)
+			_, _ = fmt.Fprintf(os.Stderr, "%s %s is not a blockchain address", config.Symbol.Error, sc.Address)
 			continue
 		}
 
@@ -51,7 +51,14 @@ func Run(args *Arguments) {
 			defer wg.Done()
 
 			if err := DetectChain(args.ChainNameOpt, sc); err != nil {
-				_, _ = fmt.Fprintf(os.Stderr, "Error: %v\n", err)
+				if err.Error() == "not found" {
+					_, _ = fmt.Fprintf(os.Stderr, "%s %s: %s\n",
+						config.Symbol.Error,
+						sc.Address,
+						"Unknown")
+				} else {
+					_, _ = fmt.Fprintf(os.Stderr, "%s Error: %v\n", config.Symbol.Error, err)
+				}
 				return
 			}
 			if args.DetectChainMode {
@@ -60,7 +67,7 @@ func Run(args *Arguments) {
 
 			err := DumpSource(sc, args.OutputOpt)
 			if err != nil {
-				_, _ = fmt.Fprintf(os.Stderr, err.Error())
+				_, _ = fmt.Fprintf(os.Stderr, "%s Error: %v\n", config.Symbol.Error, err.Error())
 			}
 			if args.DumpSourceMode {
 				return
